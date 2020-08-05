@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">AndroidHw</string>
+    <string name="add_item">Add This Item</string>
+    <string name="previous_item">Previous</string>
+    <string name="next_item">Next</string>
+    <string name="remove_item">Remove</string>
+</resources>
