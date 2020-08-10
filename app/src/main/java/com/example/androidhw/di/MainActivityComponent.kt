@@ -5,7 +5,6 @@ import dagger.Component
 
 @Component(modules = [MainActivityModule::class])
 interface MainActivityComponent {
-    //fun getViewModelFactory() : ViewModelFactory
 
     fun inject(activity: MainActivityView)
 }
