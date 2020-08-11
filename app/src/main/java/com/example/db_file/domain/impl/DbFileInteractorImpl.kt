@@ -1,21 +1,31 @@
 package com.example.db_file.domain.impl
 
 import com.example.db_file.data.FileRepository
+import com.example.db_file.data.FileRepositoryItem
 import com.example.db_file.domain.DbFileInteractor
 import javax.inject.Inject
 
 
 class DbFileInteractorImpl @Inject constructor(private val mRepository : FileRepository,
                                                private var mCurrentLine : Int = 0) : DbFileInteractor {
+    private var mCurrentCachedItem : FileRepositoryItem? = null
     private val mSpecificationFactory = mRepository.specificationFactory
 
-    override val currentItemText : String
+    private val currentItem : FileRepositoryItem
         get() {
-            val itemList = getItemList(mCurrentLine)
-            return if (itemList?.isEmpty() == false) itemList[0].text else ""
+            if (mCurrentCachedItem == null) {
+                val itemList = getItemList(mCurrentLine)
+                if (itemList?.isEmpty() == false) {
+                    mCurrentCachedItem = itemList[0]
+                }
+            }
+            return mCurrentCachedItem ?: FileRepositoryItem("")
         }
 
-    override val currentItemNumber : Int?
+    override val currentItemText : String
+        get() = currentItem.text
+
+    override val currentItemNumber : Int
         get() = mCurrentLine
 
     override val hasNextItem : Boolean
@@ -24,22 +34,55 @@ class DbFileInteractorImpl @Inject constructor(private val mRepository : FileRep
     override val hasPreviousItem : Boolean
         get() = mCurrentLine > 0
 
-    override fun goToNextItem() : String? {
+    override fun goToNextItem() : String {
         val itemList = getItemList(mCurrentLine + 1)
         if (itemList?.isEmpty() == false) {
             ++mCurrentLine
+            mCurrentCachedItem = itemList[0]
             return itemList[0].text
         }
-        return null
+        return currentItemText
     }
 
-    override fun goToPreviousItem() : String? {
+    override fun goToPreviousItem() : String {
         val itemList = getItemList(mCurrentLine - 1)
         if (itemList?.isEmpty() == false) {
             --mCurrentLine
+            mCurrentCachedItem = itemList[0]
             return itemList[0].text
         }
-        return null
+        return currentItemText
+    }
+
+    override fun removeCurrentItem() : String {
+        if (currentItem.id != null) {
+            if (mRepository.remove(currentItem)) {
+                return when {
+                    hasPreviousItem -> {
+                        goToPreviousItem()
+                    }
+                    hasNextItem -> {
+                        goToNextItem()
+                    }
+                    else -> {
+                        mCurrentCachedItem = null
+                        mCurrentLine = 0
+                        ""
+                    }
+                }
+            }
+        }
+        return currentItemText
+    }
+
+    override fun addItem(text : String) : String {
+        return if (mRepository.add(FileRepositoryItem(text))) {
+            mCurrentCachedItem = null
+            mCurrentLine = mRepository.linesCount - 1
+            text
+        } else {
+            currentItemText
+        }
     }
 
     private fun getItemList(lineNumber : Int) =
