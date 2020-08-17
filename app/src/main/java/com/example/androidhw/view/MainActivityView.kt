@@ -2,11 +2,13 @@ package com.example.androidhw.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.Observer
 import com.example.androidhw.MainActivityViewModel
 import com.example.androidhw.R
 import com.example.androidhw.di.DaggerMainActivityComponent
+import com.example.common.HwApplication
 import com.example.common.getViewModel
 import javax.inject.Inject
 
@@ -15,8 +17,13 @@ class MainActivityView : AppCompatActivity() {
 
     private lateinit var mViewModel : MainActivityViewModel
 
+    companion object {
+        private val sMainActivityComponent = DaggerMainActivityComponent.builder()
+            .appModule(HwApplication.MainAppModule).build()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        DaggerMainActivityComponent.create().inject(this)
+        sMainActivityComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -30,7 +37,8 @@ class MainActivityView : AppCompatActivity() {
     }
 
     private fun onCurrentTextChanged(text: String) {
-        //TODO!!!
+        val textView = findViewById<TextView>(R.id.output_label)
+        textView.text = text
     }
 
 //    private val directoryDownloads : String by lazy {

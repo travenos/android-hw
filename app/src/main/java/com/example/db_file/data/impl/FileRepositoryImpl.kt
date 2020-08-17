@@ -7,7 +7,8 @@ import com.example.db_file.data.TextFileSpecificationFactory
 import java.io.*
 import javax.inject.Inject
 
-class FileRepositoryImpl @Inject constructor(private val file : File) : FileRepository {
+class FileRepositoryImpl @Inject constructor(fileHolder : FileHolder) : FileRepository {
+    private val file : File = fileHolder.file
     override val linesCount : Int
         get() {
             return try {

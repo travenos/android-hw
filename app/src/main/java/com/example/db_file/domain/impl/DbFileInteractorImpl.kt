@@ -6,10 +6,12 @@ import com.example.db_file.domain.DbFileInteractor
 import javax.inject.Inject
 
 
-class DbFileInteractorImpl @Inject constructor(private val mRepository : FileRepository,
-                                               private var mCurrentLine : Int = 0) : DbFileInteractor {
+class DbFileInteractorImpl constructor(private val mRepository : FileRepository,
+                                       private var mCurrentLine : Int) : DbFileInteractor {
     private var mCurrentCachedItem : FileRepositoryItem? = null
     private val mSpecificationFactory = mRepository.specificationFactory
+
+    @Inject constructor(repository : FileRepository) : this(repository, 0)
 
     private val currentItem : FileRepositoryItem
         get() {
