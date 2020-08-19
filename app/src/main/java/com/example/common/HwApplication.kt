@@ -16,6 +16,6 @@ class HwApplication : Application() {
 
         private lateinit var sMainAppModule : AppModule
 
-        val MainAppModule get() = sMainAppModule
+        val mainAppModule get() = sMainAppModule
     }
 }

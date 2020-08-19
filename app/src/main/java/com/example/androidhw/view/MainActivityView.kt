@@ -2,6 +2,7 @@ package com.example.androidhw.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.Observer
@@ -19,10 +20,11 @@ class MainActivityView : AppCompatActivity() {
 
     companion object {
         private val sMainActivityComponent = DaggerMainActivityComponent.builder()
-            .appModule(HwApplication.MainAppModule).build()
+            .appModule(HwApplication.mainAppModule).build()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.i("MyTRACE", "MainActivityView: onCreate") //TODO!!! Remove
         sMainActivityComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
