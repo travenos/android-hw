@@ -57,13 +57,16 @@ class FileRepositoryImpl @Inject constructor(fileHolder : FileHolder) : FileRepo
         return if (specification is FileRepository.TextFileSpecification) {
             val itemList = ArrayList<FileRepositoryItem>()
             var lineNumber = 0
-            FileReader(file).use { reader ->
-                reader.forEachLine { line ->
-                    val item = convertLineToItem(line)
-                    if (specification.acceptItem(item, lineNumber++)) {
-                        itemList.add(item)
+            try {
+                FileReader(file).use { reader ->
+                    reader.forEachLine { line ->
+                        val item = convertLineToItem(line)
+                        if (specification.acceptItem(item, lineNumber++)) {
+                            itemList.add(item)
+                        }
                     }
                 }
+            } catch (ignored: IOException) {
             }
             itemList
         } else {
