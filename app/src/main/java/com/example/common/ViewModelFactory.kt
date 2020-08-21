@@ -3,7 +3,6 @@ package com.example.common
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -19,4 +18,4 @@ class ViewModelFactory @Inject constructor(
 }
 
 inline fun <reified VM : ViewModel> ViewModelProvider.Factory.getViewModel(activity: FragmentActivity) =
-    ViewModelProviders.of(activity, this).get(VM::class.java)
+    ViewModelProvider(activity, this).get(VM::class.java)

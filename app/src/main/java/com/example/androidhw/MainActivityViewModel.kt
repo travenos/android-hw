@@ -1,7 +1,6 @@
 package com.example.androidhw
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,7 +12,7 @@ import java.io.File
 import javax.inject.Inject
 
 
-class MainActivityViewModel @Inject constructor(private val mContext : Context):
+class MainActivityViewModel @Inject constructor(context : Context):
     ViewModel(), LifecycleObserver {
 
     private val mRepositoryInteractor : DbFileInteractor
@@ -22,7 +21,7 @@ class MainActivityViewModel @Inject constructor(private val mContext : Context):
     private val mHasPrevious: MutableLiveData<Boolean> = MutableLiveData()
 
     init {
-        val dbFile = File(mContext.filesDir, FILE_NAME)
+        val dbFile = File(context.filesDir, FILE_NAME)
         val dbFileModule = DbFileModule(dbFile)
         val component = DaggerDbFileComponent.builder().dbFileModule(dbFileModule).build()
         mRepositoryInteractor = component.getDbFileInteractor()

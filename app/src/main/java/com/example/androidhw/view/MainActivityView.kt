@@ -38,7 +38,12 @@ class MainActivityView : AppCompatActivity() {
         mViewModel.hasPreviousItem.observe(this, { onHasPreviousItemChanged(it) })
         mViewModel.hasNextItem.observe(this, { onHasNextItemChanged(it) })
 
-        add_button.setOnClickListener { mViewModel.addItem(new_item_text_input.text.toString()) }
+        add_button.setOnClickListener {
+            if (new_item_text_input.text.isNotEmpty()) {
+                mViewModel.addItem(new_item_text_input.text.toString())
+                new_item_text_input.text.clear()
+            }
+        }
         remove_button.setOnClickListener { mViewModel.removeItem() }
         previous_button.setOnClickListener { mViewModel.selectPrevious() }
         next_button.setOnClickListener { mViewModel.selectNext() }

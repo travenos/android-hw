@@ -4,7 +4,10 @@ import com.example.db_file.data.FileRepository
 import com.example.db_file.data.FileRepositoryItem
 import com.example.db_file.data.Repository
 import com.example.db_file.data.TextFileSpecificationFactory
-import java.io.*
+import java.io.File
+import java.io.FileReader
+import java.io.FileWriter
+import java.io.IOException
 import javax.inject.Inject
 
 class FileRepositoryImpl @Inject constructor(fileHolder : FileHolder) : FileRepository {
