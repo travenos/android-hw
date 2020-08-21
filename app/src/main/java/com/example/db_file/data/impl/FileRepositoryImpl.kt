@@ -35,7 +35,7 @@ class FileRepositoryImpl @Inject constructor(fileHolder : FileHolder) : FileRepo
         }
         try {
             FileWriter(file, true).use { writer ->
-                writer.append(convertItemToLine(item))
+                writer.appendLine(convertItemToLine(item))
                 result = true
             }
         } catch (ignored : IOException) {
