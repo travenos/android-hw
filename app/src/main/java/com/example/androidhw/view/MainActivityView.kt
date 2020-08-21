@@ -2,10 +2,8 @@ package com.example.androidhw.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.Observer
 import com.example.androidhw.MainActivityViewModel
 import com.example.androidhw.R
 import com.example.androidhw.di.DaggerMainActivityComponent
@@ -24,18 +22,15 @@ class MainActivityView : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.i("MyTRACE", "MainActivityView: onCreate") //TODO!!! Remove
         sMainActivityComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         mViewModel = mViewModelFactory.getViewModel(this)
 
-        mViewModel.currentText.observe(this, Observer { onCurrentTextChanged(it) })
-
-
-//        val textView = findViewById<TextView>(R.id.output_label)
-//        textView.setText(directoryDownloads)
+        mViewModel.currentText.observe(this, { onCurrentTextChanged(it) })
+        mViewModel.hasPreviousItem.observe(this, { onHasPreviousItemChanged(it) })
+        mViewModel.hasNextItem.observe(this, { onHasNextItemChanged(it) })
     }
 
     private fun onCurrentTextChanged(text: String) {
@@ -43,8 +38,13 @@ class MainActivityView : AppCompatActivity() {
         textView.text = text
     }
 
-//    private val directoryDownloads : String by lazy {
-//        val downloadsDir : File? = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
-//        downloadsDir?.absolutePath ?: ""
-//    }
+    private fun onHasPreviousItemChanged(has: Boolean) {
+        val button = findViewById<TextView>(R.id.previous_button)
+        button.isEnabled = has
+    }
+
+    private fun onHasNextItemChanged(has: Boolean) {
+        val button = findViewById<TextView>(R.id.next_button)
+        button.isEnabled = has
+    }
 }

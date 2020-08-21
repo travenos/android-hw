@@ -30,11 +30,11 @@ class DbFileInteractorImpl constructor(private val mRepository : FileRepository,
     override val currentItemNumber : Int
         get() = mCurrentLine
 
-    override val hasNextItem : Boolean
-        get() = mCurrentLine < mRepository.linesCount - 1
-
     override val hasPreviousItem : Boolean
         get() = mCurrentLine > 0
+
+    override val hasNextItem : Boolean
+        get() = mCurrentLine < mRepository.linesCount - 1
 
     override fun goToNextItem() : String {
         val itemList = getItemList(mCurrentLine + 1)

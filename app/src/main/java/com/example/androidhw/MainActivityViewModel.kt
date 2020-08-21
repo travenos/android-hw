@@ -6,9 +6,6 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.androidhw.di.DaggerMainActivityComponent
-import com.example.common.HwApplication
-import com.example.common.di.AppModule
 import com.example.db_file.di.DaggerDbFileComponent
 import com.example.db_file.di.DbFileModule
 import com.example.db_file.domain.DbFileInteractor
@@ -20,7 +17,9 @@ class MainActivityViewModel @Inject constructor(private val mContext : Context):
     ViewModel(), LifecycleObserver {
 
     private val mRepositoryInteractor : DbFileInteractor
-    private val _currentText: MutableLiveData<String> = MutableLiveData()
+    private val mCurrentText: MutableLiveData<String> = MutableLiveData()
+    private val mHasNext: MutableLiveData<Boolean> = MutableLiveData()
+    private val mHasPrevious: MutableLiveData<Boolean> = MutableLiveData()
 
     init {
         Log.i("MyTRACE", "MainActivityViewModel: init") //TODO!!! Remove
@@ -28,10 +27,18 @@ class MainActivityViewModel @Inject constructor(private val mContext : Context):
         val dbFileModule = DbFileModule(dbFile)
         val component = DaggerDbFileComponent.builder().dbFileModule(dbFileModule).build()
         mRepositoryInteractor = component.getDbFileInteractor()
-        _currentText.value = mRepositoryInteractor.currentItemText
+        updateLiveData()
     }
 
-    val currentText: LiveData<String> = _currentText
+    private fun updateLiveData() {
+        mCurrentText.value = mRepositoryInteractor.currentItemText
+        mHasPrevious.value = mRepositoryInteractor.hasPreviousItem
+        mHasNext.value = mRepositoryInteractor.hasNextItem
+    }
+
+    val currentText: LiveData<String> = mCurrentText
+    val hasPreviousItem: LiveData<Boolean> = mHasPrevious
+    val hasNextItem: LiveData<Boolean> = mHasNext
 
     companion object {
         private const val FILE_NAME = "db_file.txt"
