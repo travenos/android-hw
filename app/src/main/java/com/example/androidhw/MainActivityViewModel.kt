@@ -22,7 +22,6 @@ class MainActivityViewModel @Inject constructor(private val mContext : Context):
     private val mHasPrevious: MutableLiveData<Boolean> = MutableLiveData()
 
     init {
-        Log.i("MyTRACE", "MainActivityViewModel: init") //TODO!!! Remove
         val dbFile = File(mContext.filesDir, FILE_NAME)
         val dbFileModule = DbFileModule(dbFile)
         val component = DaggerDbFileComponent.builder().dbFileModule(dbFileModule).build()
@@ -30,15 +29,35 @@ class MainActivityViewModel @Inject constructor(private val mContext : Context):
         updateLiveData()
     }
 
-    private fun updateLiveData() {
-        mCurrentText.value = mRepositoryInteractor.currentItemText
-        mHasPrevious.value = mRepositoryInteractor.hasPreviousItem
-        mHasNext.value = mRepositoryInteractor.hasNextItem
+    fun selectPrevious() {
+        mRepositoryInteractor.goToPreviousItem()
+        updateLiveData()
+    }
+
+    fun selectNext() {
+        mRepositoryInteractor.goToNextItem()
+        updateLiveData()
+    }
+
+    fun removeItem() {
+        mRepositoryInteractor.removeCurrentItem()
+        updateLiveData()
+    }
+
+    fun addItem(text : String) {
+        mRepositoryInteractor.addItem(text)
+        updateLiveData()
     }
 
     val currentText: LiveData<String> = mCurrentText
     val hasPreviousItem: LiveData<Boolean> = mHasPrevious
     val hasNextItem: LiveData<Boolean> = mHasNext
+
+    private fun updateLiveData() {
+        mCurrentText.value = mRepositoryInteractor.currentItemText
+        mHasPrevious.value = mRepositoryInteractor.hasPreviousItem
+        mHasNext.value = mRepositoryInteractor.hasNextItem
+    }
 
     companion object {
         private const val FILE_NAME = "db_file.txt"
