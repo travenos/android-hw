@@ -1,7 +1,7 @@
 package com.example.androidhw.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.androidhw.MainActivityViewModel
 import com.example.androidhw.R
