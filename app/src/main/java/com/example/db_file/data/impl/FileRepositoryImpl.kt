@@ -124,7 +124,7 @@ class FileRepositoryImpl @Inject constructor(fileHolder : FileHolder) : FileRepo
     }
 
     private fun convertLineToItem(line : String) : FileRepositoryItem {
-        //TODO!!! test with incorrect string
+        //TODO Write a test with incorrect string
         val indexOfDelimiter = line.indexOf(':')
         val text : String = line.substring(indexOfDelimiter + 1)
         val id : Int? = try {
@@ -139,6 +139,6 @@ class FileRepositoryImpl @Inject constructor(fileHolder : FileHolder) : FileRepo
     }
 
     private fun convertItemToLine(item : FileRepositoryItem) : String
-            //TODO!!! test with null id, string with \n
+            //TODO Write a test with null id, string with \n
             = item.id?.toString() ?: getNextFreeId().toString() + ":" + item.text.also { it.replace("\n", "\\n") }
 }
