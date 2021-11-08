@@ -11,7 +11,7 @@ import dagger.Provides
 import java.io.File
 
 @Module
-interface DbFileModuleBase {
+internal interface DbFileModuleBase {
     @PerDbFileModule
     @Binds
     fun provideDbFileInteractor(interactor : DbFileInteractorImpl) : DbFileInteractor
